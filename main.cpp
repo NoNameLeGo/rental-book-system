@@ -377,6 +377,23 @@ int main() {
                         break;
                     }
                     case 5: {
+                        cout << "--- 分类管理 ---" << endl;
+                        cout << "1. 查看所有分类 2. 添加分类 0. 返回" << endl;
+                        int catChoice;
+                        cin >> catChoice;
+                        cin.ignore();
+                        if (catChoice == 1) {
+                            bookManager.showAllCategories();
+                        } else if (catChoice == 2) {
+                            string catId, catName;
+                            cout << "请输入分类ID："; getline(cin, catId);
+                            cout << "请输入分类名称："; getline(cin, catName);
+                            bookManager.addCategory(BookCategory(catId, catName));
+                            cout << "添加成功。" << endl;
+                        }
+                        break;
+                    }
+                    case 6: {
                         bookManager.saveBooksToCSV("datas/book.csv");
                         bookManager.saveCategoriesToCSV("datas/category.csv");
                         memberManager.saveMembersToCSV("datas/member.csv");

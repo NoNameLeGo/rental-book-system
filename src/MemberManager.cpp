@@ -2,32 +2,33 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+using namespace std;
 
 void MemberManager::addMember(const Member& member) {
     members.push_back(member);
 }
 
-void MemberManager::modifyMember(const std::string& acc, const Member& member) {
+void MemberManager::modifyMember(const string& acc, const Member& member) {
     for (auto& m : members) {
         if (m.getAcc() == acc) {
             m = member;
             return;
         }
     }
-    std::cout << "未找到会员：" << acc << std::endl;
+    cout << "未找到会员：" << acc << endl;
 }
 
-void MemberManager::deleteMember(const std::string& acc) {
+void MemberManager::deleteMember(const string& acc) {
     for (auto it = members.begin(); it != members.end(); ++it) {
         if (it->getAcc() == acc) {
             members.erase(it);
             return;
         }
     }
-    std::cout << "未找到会员：" << acc << std::endl;
+    cout << "未找到会员：" << acc << endl;
 }
 
-Member* MemberManager::searchMember(const std::string& acc) {
+Member* MemberManager::searchMember(const string& acc) {
     for (auto& m : members) {
         if (m.getAcc() == acc) {
             return &m;
@@ -38,47 +39,47 @@ Member* MemberManager::searchMember(const std::string& acc) {
 
 void MemberManager::showAllMembers() {
     if (members.empty()) {
-        std::cout << "没有会员记录。" << std::endl;
+        cout << "没有会员记录。" << endl;
         return;
     }
-    std::cout << "账号\t\t姓名\t\t电话\t\t注册日期" << std::endl;
-    std::cout << "--------------------------------------------------------" << std::endl;
+    cout << "账号\t\t姓名\t\t电话\t\t注册日期" << endl;
+    cout << "--------------------------------------------------------" << endl;
     for (const auto& m : members) {
-        std::cout << m.getAcc() << "\t\t" << m.getName() << "\t\t" << m.getPhone() << "\t" << m.getRegDate() << std::endl;
+        cout << m.getAcc() << "\t\t" << m.getName() << "\t\t" << m.getPhone() << "\t" << m.getRegDate() << endl;
     }
 }
 
-void MemberManager::saveMembersToCSV(const std::string& filename) {
-    std::ofstream file(filename);
+void MemberManager::saveMembersToCSV(const string& filename) {
+    ofstream file(filename);
     if (!file.is_open()) {
-        std::cout << "无法打开文件：" << filename << std::endl;
+        cout << "无法打开文件：" << filename << endl;
         return;
     }
-    file << "账号,密码,姓名,电话,注册日期" << std::endl;
+    file << "账号,密码,姓名,电话,注册日期" << endl;
     for (const auto& m : members) {
         file << m.getAcc() << "," << m.getPwd() << "," << m.getName() << ","
-             << m.getPhone() << "," << m.getRegDate() << std::endl;
+             << m.getPhone() << "," << m.getRegDate() << endl;
     }
     file.close();
 }
 
-void MemberManager::readMembersFromCSV(const std::string& filename) {
-    std::ifstream file(filename);
+void MemberManager::readMembersFromCSV(const string& filename) {
+    ifstream file(filename);
     if (!file.is_open()) {
         return;
     }
     members.clear();
-    std::string line;
-    std::getline(file, line);
-    while (std::getline(file, line)) {
+    string line;
+    getline(file, line);
+    while (getline(file, line)) {
         if (line.empty()) continue;
-        std::stringstream ss(line);
-        std::string acc, pwd, name, phone, regDate;
-        std::getline(ss, acc, ',');
-        std::getline(ss, pwd, ',');
-        std::getline(ss, name, ',');
-        std::getline(ss, phone, ',');
-        std::getline(ss, regDate, ',');
+        stringstream ss(line);
+        string acc, pwd, name, phone, regDate;
+        getline(ss, acc, ',');
+        getline(ss, pwd, ',');
+        getline(ss, name, ',');
+        getline(ss, phone, ',');
+        getline(ss, regDate, ',');
         members.push_back(Member(acc, pwd, name, phone, regDate));
     }
     file.close();

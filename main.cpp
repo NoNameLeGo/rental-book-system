@@ -342,11 +342,14 @@ int main() {
                         } else if (memberChoice == 3) {
                             string acc2;
                             cout << "请输入要删除的账号："; getline(cin, acc2);
-                            memberManager.deleteMember(acc2);
-                            if (!deleteUserFromCSV(acc2)) {
-                                cout << "警告：会员已删除，但用户登录文件更新失败。" << endl;
+                            if (memberManager.deleteMember(acc2)) {
+                                if (!deleteUserFromCSV(acc2)) {
+                                    cout << "警告：会员已删除，但用户登录文件更新失败。" << endl;
+                                } else {
+                                    cout << "删除成功。" << endl;
+                                }
                             } else {
-                                cout << "删除成功。" << endl;
+                                cout << "未找到该会员。" << endl;
                             }
                         } else if (memberChoice == 4) {
                             memberManager.showAllMembers();

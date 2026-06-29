@@ -18,14 +18,14 @@ void MemberManager::modifyMember(const string& acc, const Member& member) {
     cout << "未找到会员：" << acc << endl;
 }
 
-void MemberManager::deleteMember(const string& acc) {
+bool MemberManager::deleteMember(const string& acc) {
     for (auto it = members.begin(); it != members.end(); ++it) {
         if (it->getAcc() == acc) {
             members.erase(it);
-            return;
+            return true;
         }
     }
-    cout << "未找到会员：" << acc << endl;
+    return false;
 }
 
 Member* MemberManager::searchMember(const string& acc) {

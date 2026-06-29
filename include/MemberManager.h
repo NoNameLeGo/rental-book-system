@@ -15,7 +15,7 @@ public:
     
     void addMember(const Member& member);
     void modifyMember(const std::string& acc, const Member& member);
-    void deleteMember(const std::string& acc);
+    bool deleteMember(const std::string& acc);
     Member* searchMember(const std::string& acc);
     void showAllMembers();
     

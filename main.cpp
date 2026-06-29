@@ -314,6 +314,10 @@ int main() {
                         if (memberChoice == 1) {
                             string acc2, pwd2, name, phone;
                             cout << "请输入账号："; getline(cin, acc2);
+                            if (memberManager.searchMember(acc2) != NULL) {
+                                cout << "该账号已存在，请勿重复添加。" << endl;
+                                break;
+                            }
                             cout << "请输入密码："; getline(cin, pwd2);
                             cout << "请输入姓名："; getline(cin, name);
                             cout << "请输入电话："; getline(cin, phone);

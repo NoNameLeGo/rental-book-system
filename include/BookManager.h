@@ -18,7 +18,7 @@ public:
     // 书籍管理
     void addBook(const Book& book);
     void modifyBook(const std::string& id, const Book& book);
-    void deleteBook(const std::string& id);
+    bool deleteBook(const std::string& id);
     Book* searchBook(const std::string& id);
     void showAllBooks();
     

@@ -291,8 +291,11 @@ int main() {
                         } else if (bookChoice == 3) {
                             string id;
                             cout << "请输入要删除的书号："; getline(cin, id);
-                            bookManager.deleteBook(id);
-                            cout << "删除成功。" << endl;
+                            if (bookManager.deleteBook(id)) {
+                                cout << "删除成功。" << endl;
+                            } else {
+                                cout << "未找到该书籍。" << endl;
+                            }
                         } else if (bookChoice == 4) {
                             bookManager.showAllBooks();
                         }

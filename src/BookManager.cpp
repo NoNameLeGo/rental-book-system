@@ -20,14 +20,14 @@ void BookManager::modifyBook(const string& id, const Book& book) {
     cout << "未找到书籍：" << id << endl;
 }
 
-void BookManager::deleteBook(const string& id) {
+bool BookManager::deleteBook(const string& id) {
     for (auto it = books.begin(); it != books.end(); ++it) {
         if (it->getId() == id) {
             books.erase(it);
-            return;
+            return true;
         }
     }
-    cout << "未找到书籍：" << id << endl;
+    return false;
 }
 
 Book* BookManager::searchBook(const string& id) {

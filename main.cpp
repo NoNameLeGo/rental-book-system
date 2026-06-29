@@ -47,6 +47,18 @@ void initUserFile() {
     file.close();
 }
 
+void initMemberFile() {
+    ifstream file("datas/member.csv");
+    if (!file.is_open()) {
+        ofstream outFile("datas/member.csv");
+        outFile << "账号,密码,姓名,电话,注册日期" << endl;
+        outFile << "member1,123456,会员,13800138002,2026-01-01" << endl;
+        outFile.close();
+        cout << "已创建默认会员文件。" << endl;
+    }
+    file.close();
+}
+
 vector<string> readUserFromFile(const string& acc) {
     ifstream file("datas/user.csv");
     if (!file.is_open()) {
@@ -152,6 +164,7 @@ int main() {
 
     createDataDir();
     initUserFile();
+    initMemberFile();
 
     BookManager bookManager;
     MemberManager memberManager;

@@ -42,7 +42,7 @@ public:
         time_t time2 = mktime(&t2);
         if (time1 == -1 || time2 == -1) return 0;
         double diff = difftime(time2, time1) / (60 * 60 * 24);
-        return static_cast<int>(diff);
+        return static_cast<int>(diff >= 0 ? diff + 0.5 : diff - 0.5);
     }
 
     static std::string addDays(const std::string& date, int days) {

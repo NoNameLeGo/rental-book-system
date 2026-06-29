@@ -45,6 +45,8 @@ void RentalManager::returnBook(const std::string& recordId, const std::string& r
                     std::cout << "逾期费用：" << std::fixed << std::setprecision(2) << overdueFee << "元（逾期" << overdueDays << "天）" << std::endl;
                 }
                 std::cout << "总计：" << std::fixed << std::setprecision(2) << (rentalFee + overdueFee) << "元" << std::endl;
+            } else {
+                std::cout << "警告：对应书籍已被删除，无法计算费用，但归还日期已记录。" << std::endl;
             }
             return;
         }
@@ -68,14 +70,16 @@ void RentalManager::showAllRecords() {
 
 void RentalManager::showMemberRecords(const std::string& memberId) {
     bool found = false;
-    std::cout << "记录ID\t\t书号\t租借日期\t归还日期\t租金\t逾期费用" << std::endl;
     for (const auto& r : records) {
         if (r.getMemberId() == memberId) {
+            if (!found) {
+                std::cout << "记录ID\t\t书号\t租借日期\t归还日期\t租金\t逾期费用" << std::endl;
+                found = true;
+            }
             std::string returnDate = r.getReturnDate().empty() ? "未归还" : r.getReturnDate();
             std::cout << r.getId() << "\t" << r.getBookId() << "\t" << r.getRentalDate() << "\t"
                       << returnDate << "\t" << std::fixed << std::setprecision(2) 
                       << r.getRentalFee() << "\t" << r.getOverdueFee() << std::endl;
-            found = true;
         }
     }
     if (!found) {
@@ -87,17 +91,19 @@ void RentalManager::showOverdueRecords() {
     std::string currentDate = DateUtil::getToday();
     bool found = false;
     
-    std::cout << "当前日期：" << currentDate << "，租借期限：" << DateUtil::RENTAL_PERIOD_DAYS << "天" << std::endl;
-    std::cout << "逾期记录：" << std::endl;
-    std::cout << "记录ID\t\t书号\t会员账号\t租借日期\t应还日期\t租金\t逾期费用" << std::endl;
     for (const auto& r : records) {
         if (r.getReturnDate().empty() && DateUtil::isOverdue(r.getRentalDate(), currentDate)) {
+            if (!found) {
+                std::cout << "当前日期：" << currentDate << "，租借期限：" << DateUtil::RENTAL_PERIOD_DAYS << "天" << std::endl;
+                std::cout << "逾期记录：" << std::endl;
+                std::cout << "记录ID\t\t书号\t会员账号\t租借日期\t应还日期\t租金\t逾期费用" << std::endl;
+                found = true;
+            }
             std::string dueDate = DateUtil::addDays(r.getRentalDate(), DateUtil::RENTAL_PERIOD_DAYS);
             int overdueDays = DateUtil::daysBetween(dueDate, currentDate);
             std::cout << r.getId() << "\t" << r.getBookId() << "\t" << r.getMemberId() << "\t"
                       << r.getRentalDate() << "\t" << dueDate << "\t"
                       << std::fixed << std::setprecision(2) << r.getRentalFee() << "\t已逾期" << overdueDays << "天" << std::endl;
-            found = true;
         }
     }
     if (!found) {

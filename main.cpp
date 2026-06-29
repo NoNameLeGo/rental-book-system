@@ -291,8 +291,11 @@ void memberManageMenu(MemberManager& memberManager) {
             string phone = readLine("请输入新电话：");
             string regDate = member->getRegDate();
             memberManager.modifyMember(acc, Member(acc, pwd, name, phone, regDate));
-            modifyUserInCSV(acc, pwd, name, phone);
-            cout << "修改成功。" << endl;
+            if (!modifyUserInCSV(acc, pwd, name, phone)) {
+                cout << "警告：会员信息已修改，但用户登录文件更新失败。" << endl;
+            } else {
+                cout << "修改成功。" << endl;
+            }
         } else {
             cout << "未找到会员。" << endl;
         }
@@ -306,8 +309,11 @@ void memberManageMenu(MemberManager& memberManager) {
             clearInputBuffer();
             if (confirm == 'y' || confirm == 'Y') {
                 memberManager.deleteMember(acc);
-                deleteUserFromCSV(acc);
-                cout << "删除成功。" << endl;
+                if (!deleteUserFromCSV(acc)) {
+                    cout << "警告：会员已删除，但用户登录文件更新失败。" << endl;
+                } else {
+                    cout << "删除成功。" << endl;
+                }
             } else {
                 cout << "已取消删除。" << endl;
             }
@@ -336,7 +342,7 @@ void categoryManageMenu(BookManager& bookManager) {
     }
 }
 
-void rentalManageMenu(RentalManager& rentalManager, BookManager& bookManager, const string& memberId, bool isMember) {
+void rentalManageMenu(RentalManager& rentalManager, BookManager& bookManager, MemberManager& memberManager, const string& memberId, bool isMember) {
     cout << "\n--- 租借管理 ---" << endl;
     cout << "1. 租借书籍" << endl;
     cout << "2. 归还书籍" << endl;
@@ -350,6 +356,13 @@ void rentalManageMenu(RentalManager& rentalManager, BookManager& bookManager, co
     if (choice == 1) {
         string bookId = readLine("请输入书号：");
         string actualMemberId = isMember ? memberId : readLine("请输入会员账号：");
+        if (!isMember) {
+            Member* member = memberManager.searchMember(actualMemberId);
+            if (!member) {
+                cout << "会员账号不存在。" << endl;
+                return;
+            }
+        }
         Book* book = bookManager.searchBook(bookId);
         if (book && book->getStock() > 0) {
             string rentalDate = DateUtil::getToday();
@@ -466,7 +479,7 @@ int main() {
                 switch (choice) {
                     case 1: bookManageMenu(bookManager); break;
                     case 2: memberManageMenu(memberManager); break;
-                    case 3: rentalManageMenu(rentalManager, bookManager, "", false); break;
+                    case 3: rentalManageMenu(rentalManager, bookManager, memberManager, "", false); break;
                     case 4: rentalManager.showOverdueRecords(); break;
                     case 5: categoryManageMenu(bookManager); break;
                     case 6: {
@@ -483,7 +496,7 @@ int main() {
             } else if (user->getRoleType() == 2) {
                 switch (choice) {
                     case 1: bookManageMenu(bookManager); break;
-                    case 2: rentalManageMenu(rentalManager, bookManager, "", false); break;
+                    case 2: rentalManageMenu(rentalManager, bookManager, memberManager, "", false); break;
                     case 3: rentalManager.showOverdueRecords(); break;
                     case 0: logout = true; cout << "已退出登录。" << endl; break;
                     default: cout << "无效选择，请重新输入。" << endl; break;
@@ -491,7 +504,7 @@ int main() {
             } else if (user->getRoleType() == 3) {
                 switch (choice) {
                     case 1: bookManager.showAllBooks(); break;
-                    case 2: rentalManageMenu(rentalManager, bookManager, user->getAcc(), true); break;
+                    case 2: rentalManageMenu(rentalManager, bookManager, memberManager, user->getAcc(), true); break;
                     case 3: {
                         string recordId = readLine("请输入记录ID：");
                         string returnDate = DateUtil::getToday();

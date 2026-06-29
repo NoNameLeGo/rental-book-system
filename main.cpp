@@ -261,6 +261,10 @@ int main() {
                             double price;
                             int stock;
                             cout << "请输入书号："; getline(cin, id);
+                            if (bookManager.searchBook(id) != NULL) {
+                                cout << "该书号已存在，请勿重复添加。" << endl;
+                                break;
+                            }
                             cout << "请输入书名："; getline(cin, title);
                             cout << "请输入作者："; getline(cin, author);
                             cout << "请输入出版社："; getline(cin, publisher);

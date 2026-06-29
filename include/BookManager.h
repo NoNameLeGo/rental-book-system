@@ -24,6 +24,7 @@ public:
     
     // 分类管理
     void addCategory(const BookCategory& category);
+    BookCategory* searchCategory(const std::string& id);
     void showAllCategories();
     
     // 文件操作

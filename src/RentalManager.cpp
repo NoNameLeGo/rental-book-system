@@ -6,6 +6,7 @@
 #include <sstream>
 #include <ctime>
 #include <iomanip>
+#include <cstdlib>
 
 void RentalManager::addRecord(const RentalRecord& record) {
     records.push_back(record);
@@ -147,9 +148,8 @@ void RentalManager::readRecordsFromCSV(const std::string& filename) {
         std::getline(ss, rentalFeeStr, ',');
         std::getline(ss, overdueFeeStr, ',');
         
-        double rentalFee = 0.0, overdueFee = 0.0;
-        try { rentalFee = std::stod(rentalFeeStr); } catch (...) {}
-        try { overdueFee = std::stod(overdueFeeStr); } catch (...) {}
+        double rentalFee = atof(rentalFeeStr.c_str());
+        double overdueFee = atof(overdueFeeStr.c_str());
         
         records.push_back(RentalRecord(id, bookId, memberId, rentalDate, returnDate, rentalFee, overdueFee));
     }

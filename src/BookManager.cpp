@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <cstdlib>
 
 void BookManager::addBook(const Book& book) {
     books.push_back(book);
@@ -111,10 +112,8 @@ void BookManager::readBooksFromCSV(const std::string& filename) {
         std::getline(ss, stockStr, ',');
         std::getline(ss, categoryId, ',');
         
-        double price = 0.0;
-        int stock = 0;
-        try { price = std::stod(priceStr); } catch (...) {}
-        try { stock = std::stoi(stockStr); } catch (...) {}
+        double price = atof(priceStr.c_str());
+        int stock = atoi(stockStr.c_str());
         
         books.push_back(Book(id, title, author, publisher, price, stock, categoryId));
     }

@@ -204,8 +204,7 @@ int main() {
             cout << "密码错误。" << endl;
             continue;
         }
-        int fileRole = 0;
-        try { fileRole = stoi(userInfo[2]); } catch (...) {}
+        int fileRole = atoi(userInfo[2].c_str());
         if (fileRole != roleChoice) {
             cout << "角色不匹配。" << endl;
             continue;

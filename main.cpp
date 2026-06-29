@@ -374,6 +374,11 @@ int main() {
                             string bookId, memberId;
                             cout << "请输入书号："; getline(cin, bookId);
                             cout << "请输入会员账号："; getline(cin, memberId);
+                            Member* member = memberManager.searchMember(memberId);
+                            if (!member) {
+                                cout << "会员不存在。" << endl;
+                                break;
+                            }
                             Book* book = bookManager.searchBook(bookId);
                             if (book && book->getStock() > 0) {
                                 string rentalDate = DateUtil::getToday();
@@ -461,6 +466,11 @@ int main() {
                             string bookId, memberId;
                             cout << "请输入书号："; getline(cin, bookId);
                             cout << "请输入会员账号："; getline(cin, memberId);
+                            Member* member = memberManager.searchMember(memberId);
+                            if (!member) {
+                                cout << "会员不存在。" << endl;
+                                break;
+                            }
                             Book* book = bookManager.searchBook(bookId);
                             if (book && book->getStock() > 0) {
                                 string rentalDate = DateUtil::getToday();

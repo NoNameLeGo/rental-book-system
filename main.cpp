@@ -29,12 +29,13 @@ void clearInputBuffer() {
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
-
 string readLine(const string& prompt) {
     while (true) {
         cout << prompt;
         string input;
-        getline(cin >> ws, input);
+        if (cin.peek() == '\n') cin.ignore();
+        getline(cin, input);
+        if (!input.empty() && input.back() == '\r') input.pop_back();
         if (input.find(',') != string::npos) {
             cout << "输入不能包含逗号（,），请重新输入：" << endl;
             continue;
@@ -48,12 +49,13 @@ int readInt(const string& prompt) {
         cout << prompt;
         int value;
         if (cin >> value) {
-            clearInputBuffer();
+            cin.ignore();
             return value;
         }
         if (cin.eof()) return 0;
         cout << "输入无效，请输入一个整数。" << endl;
-        clearInputBuffer();
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
 }
 
@@ -62,12 +64,13 @@ double readDouble(const string& prompt) {
         cout << prompt;
         double value;
         if (cin >> value) {
-            clearInputBuffer();
+            cin.ignore();
             return value;
         }
         if (cin.eof()) return 0.0;
         cout << "输入无效，请输入一个数字。" << endl;
-        clearInputBuffer();
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
 }
 

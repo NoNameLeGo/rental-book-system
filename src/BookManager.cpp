@@ -55,6 +55,15 @@ void BookManager::addCategory(const BookCategory& category) {
     categories.push_back(category);
 }
 
+BookCategory* BookManager::searchCategory(const std::string& id) {
+    for (auto& c : categories) {
+        if (c.getId() == id) {
+            return &c;
+        }
+    }
+    return nullptr;
+}
+
 void BookManager::showAllCategories() {
     if (categories.empty()) {
         std::cout << "没有分类记录。" << std::endl;

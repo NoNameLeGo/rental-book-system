@@ -31,10 +31,16 @@ void clearInputBuffer() {
 }
 
 string readLine(const string& prompt) {
-    cout << prompt;
-    string input;
-    getline(cin >> ws, input);
-    return input;
+    while (true) {
+        cout << prompt;
+        string input;
+        getline(cin >> ws, input);
+        if (input.find(',') != string::npos) {
+            cout << "输入不能包含逗号（,），请重新输入：" << endl;
+            continue;
+        }
+        return input;
+    }
 }
 
 int readInt(const string& prompt) {
@@ -198,11 +204,23 @@ void bookManageMenu(BookManager& bookManager) {
     
     if (choice == 1) {
         string id = readLine("请输入书号：");
+        if (bookManager.searchBook(id)) {
+            cout << "该书号已存在。" << endl;
+            return;
+        }
         string title = readLine("请输入书名：");
         string author = readLine("请输入作者：");
         string publisher = readLine("请输入出版社：");
-        double price = readDouble("请输入价格：");
-        int stock = readInt("请输入库存：");
+        double price;
+        do {
+            price = readDouble("请输入价格：");
+            if (price < 0) cout << "价格不能为负数，请重新输入。" << endl;
+        } while (price < 0);
+        int stock;
+        do {
+            stock = readInt("请输入库存：");
+            if (stock < 0) cout << "库存不能为负数，请重新输入。" << endl;
+        } while (stock < 0);
         string categoryId = readLine("请输入分类ID：");
         bookManager.addBook(Book(id, title, author, publisher, price, stock, categoryId));
         cout << "添加成功。" << endl;
@@ -213,8 +231,16 @@ void bookManageMenu(BookManager& bookManager) {
             string title = readLine("请输入新书名：");
             string author = readLine("请输入新作者：");
             string publisher = readLine("请输入新出版社：");
-            double price = readDouble("请输入新价格：");
-            int stock = readInt("请输入新库存：");
+            double price;
+            do {
+                price = readDouble("请输入新价格：");
+                if (price < 0) cout << "价格不能为负数，请重新输入。" << endl;
+            } while (price < 0);
+            int stock;
+            do {
+                stock = readInt("请输入新库存：");
+                if (stock < 0) cout << "库存不能为负数，请重新输入。" << endl;
+            } while (stock < 0);
             string categoryId = readLine("请输入新分类ID：");
             bookManager.modifyBook(id, Book(id, title, author, publisher, price, stock, categoryId));
             cout << "修改成功。" << endl;
@@ -334,6 +360,10 @@ void categoryManageMenu(BookManager& bookManager) {
     
     if (choice == 1) {
         string id = readLine("请输入分类ID：");
+        if (bookManager.searchCategory(id)) {
+            cout << "该分类ID已存在。" << endl;
+            return;
+        }
         string name = readLine("请输入分类名称：");
         bookManager.addCategory(BookCategory(id, name));
         cout << "添加成功。" << endl;

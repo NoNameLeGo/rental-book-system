@@ -41,9 +41,10 @@ void MemberManager::showAllMembers() {
         std::cout << "没有会员记录。" << std::endl;
         return;
     }
-    std::cout << "账号\t姓名\t电话\t注册日期" << std::endl;
+    std::cout << "账号\t\t姓名\t\t电话\t\t注册日期" << std::endl;
+    std::cout << "--------------------------------------------------------" << std::endl;
     for (const auto& m : members) {
-        std::cout << m.getAcc() << "\t" << m.getName() << "\t" << m.getPhone() << "\t" << m.getRegDate() << std::endl;
+        std::cout << m.getAcc() << "\t\t" << m.getName() << "\t\t" << m.getPhone() << "\t" << m.getRegDate() << std::endl;
     }
 }
 
@@ -64,13 +65,13 @@ void MemberManager::saveMembersToCSV(const std::string& filename) {
 void MemberManager::readMembersFromCSV(const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
-        std::cout << "无法打开文件：" << filename << std::endl;
         return;
     }
     members.clear();
     std::string line;
-    std::getline(file, line); // 跳过标题行
+    std::getline(file, line);
     while (std::getline(file, line)) {
+        if (line.empty()) continue;
         std::stringstream ss(line);
         std::string acc, pwd, name, phone, regDate;
         std::getline(ss, acc, ',');

@@ -5,20 +5,23 @@
 #include <vector>
 #include <string>
 
+class BookManager;
+
 class RentalManager {
 private:
     std::vector<RentalRecord> records;
+    int recordCounter;
 
 public:
-    RentalManager() {}
+    RentalManager() : recordCounter(0) {}
     ~RentalManager() {}
     
     void addRecord(const RentalRecord& record);
-    void returnBook(const std::string& recordId, const std::string& returnDate);
+    std::string generateRecordId();
+    void returnBook(const std::string& recordId, const std::string& returnDate, BookManager& bookManager);
     void showAllRecords();
     void showMemberRecords(const std::string& memberId);
     void showOverdueRecords();
-    double calculateFee(const std::string& bookId, int days);
     
     void saveRecordsToCSV(const std::string& filename);
     void readRecordsFromCSV(const std::string& filename);

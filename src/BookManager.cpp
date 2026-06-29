@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <iomanip>
 
 void BookManager::addBook(const Book& book) {
     books.push_back(book);
@@ -41,10 +42,12 @@ void BookManager::showAllBooks() {
         std::cout << "没有书籍记录。" << std::endl;
         return;
     }
-    std::cout << "书号\t书名\t作者\t出版社\t价格\t库存\t分类" << std::endl;
+    std::cout << "书号\t书名\t\t作者\t\t出版社\t\t价格\t库存\t分类" << std::endl;
+    std::cout << "------------------------------------------------------------------------" << std::endl;
     for (const auto& b : books) {
-        std::cout << b.getId() << "\t" << b.getTitle() << "\t" << b.getAuthor() << "\t"
-                  << b.getPublisher() << "\t" << b.getPrice() << "\t" << b.getStock() << "\t" << b.getCategoryId() << std::endl;
+        std::cout << b.getId() << "\t" << b.getTitle() << "\t\t" << b.getAuthor() << "\t\t"
+                  << b.getPublisher() << "\t" << std::fixed << std::setprecision(2) << b.getPrice() 
+                  << "\t" << b.getStock() << "\t" << b.getCategoryId() << std::endl;
     }
 }
 
@@ -72,7 +75,8 @@ void BookManager::saveBooksToCSV(const std::string& filename) {
     file << "书号,书名,作者,出版社,价格,库存,分类ID" << std::endl;
     for (const auto& b : books) {
         file << b.getId() << "," << b.getTitle() << "," << b.getAuthor() << ","
-             << b.getPublisher() << "," << b.getPrice() << "," << b.getStock() << "," << b.getCategoryId() << std::endl;
+             << b.getPublisher() << "," << std::fixed << std::setprecision(2) << b.getPrice() 
+             << "," << b.getStock() << "," << b.getCategoryId() << std::endl;
     }
     file.close();
 }
@@ -80,26 +84,29 @@ void BookManager::saveBooksToCSV(const std::string& filename) {
 void BookManager::readBooksFromCSV(const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
-        std::cout << "无法打开文件：" << filename << std::endl;
         return;
     }
     books.clear();
     std::string line;
-    std::getline(file, line); // 跳过标题行
+    std::getline(file, line);
     while (std::getline(file, line)) {
+        if (line.empty()) continue;
         std::stringstream ss(line);
         std::string id, title, author, publisher, categoryId;
-        double price;
-        int stock;
+        std::string priceStr, stockStr;
         std::getline(ss, id, ',');
         std::getline(ss, title, ',');
         std::getline(ss, author, ',');
         std::getline(ss, publisher, ',');
-        ss >> price;
-        ss.ignore();
-        ss >> stock;
-        ss.ignore();
+        std::getline(ss, priceStr, ',');
+        std::getline(ss, stockStr, ',');
         std::getline(ss, categoryId, ',');
+        
+        double price = 0.0;
+        int stock = 0;
+        try { price = std::stod(priceStr); } catch (...) {}
+        try { stock = std::stoi(stockStr); } catch (...) {}
+        
         books.push_back(Book(id, title, author, publisher, price, stock, categoryId));
     }
     file.close();
@@ -121,13 +128,13 @@ void BookManager::saveCategoriesToCSV(const std::string& filename) {
 void BookManager::readCategoriesFromCSV(const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
-        std::cout << "无法打开文件：" << filename << std::endl;
         return;
     }
     categories.clear();
     std::string line;
-    std::getline(file, line); // 跳过标题行
+    std::getline(file, line);
     while (std::getline(file, line)) {
+        if (line.empty()) continue;
         std::stringstream ss(line);
         std::string id, name;
         std::getline(ss, id, ',');

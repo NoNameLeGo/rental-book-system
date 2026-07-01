@@ -4,6 +4,87 @@
 #include <sstream>
 using namespace std;
 
+vector<string> MemberManager::readUserFromFile(const string& acc) {
+    ifstream file("datas/user.csv");
+    if (!file.is_open()) return {};
+    string line;
+    getline(file, line);
+    while (getline(file, line)) {
+        if (line.empty()) continue;
+        stringstream ss(line);
+        string fileAcc, pwd, role, name, phone;
+        getline(ss, fileAcc, ',');
+        getline(ss, pwd, ',');
+        getline(ss, role, ',');
+        getline(ss, name, ',');
+        getline(ss, phone, ',');
+        if (fileAcc == acc) return {fileAcc, pwd, role, name, phone};
+    }
+    return {};
+}
+
+bool MemberManager::addUserToCSV(const string& acc, const string& pwd, int role, const string& name, const string& phone) {
+    if (!readUserFromFile(acc).empty()) return false;
+    ofstream file("datas/user.csv", ios::app);
+    if (!file.is_open()) return false;
+    file << acc << "," << pwd << "," << role << "," << name << "," << phone << endl;
+    return true;
+}
+
+bool MemberManager::modifyUserInCSV(const string& acc, const string& pwd, const string& name, const string& phone) {
+    ifstream file("datas/user.csv");
+    if (!file.is_open()) return false;
+    vector<string> lines;
+    string line;
+    getline(file, line);
+    lines.push_back(line);
+    bool found = false;
+    while (getline(file, line)) {
+        if (line.empty()) continue;
+        stringstream ss(line);
+        string fileAcc, pwd2, role, oldName, oldPhone;
+        getline(ss, fileAcc, ',');
+        getline(ss, pwd2, ',');
+        getline(ss, role, ',');
+        getline(ss, oldName, ',');
+        getline(ss, oldPhone, ',');
+        if (fileAcc == acc) {
+            lines.push_back(acc + "," + pwd + "," + role + "," + name + "," + phone);
+            found = true;
+        } else {
+            lines.push_back(line);
+        }
+    }
+    file.close();
+    if (!found) return false;
+    ofstream outFile("datas/user.csv");
+    for (const auto& l : lines) outFile << l << endl;
+    return true;
+}
+
+bool MemberManager::deleteUserFromCSV(const string& acc) {
+    ifstream file("datas/user.csv");
+    if (!file.is_open()) return false;
+    vector<string> lines;
+    string line;
+    getline(file, line);
+    lines.push_back(line);
+    bool found = false;
+    while (getline(file, line)) {
+        if (line.empty()) continue;
+        stringstream ss(line);
+        string fileAcc;
+        getline(ss, fileAcc, ',');
+        if (fileAcc == acc) found = true;
+        else lines.push_back(line);
+    }
+    file.close();
+    if (!found) return false;
+    ofstream outFile("datas/user.csv");
+    for (const auto& l : lines) outFile << l << endl;
+    return true;
+}
+
 void MemberManager::addMember(const Member& member) {
     members.push_back(member);
 }

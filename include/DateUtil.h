@@ -7,8 +7,8 @@
 class DateUtil {
 public:
     static const int RENTAL_PERIOD_DAYS = 30;
-    static const double DAILY_RATE_RATIO;
-    static const double OVERDUE_RATE_RATIO;
+    static constexpr double DAILY_RATE_RATIO = 0.01;
+    static constexpr double OVERDUE_RATE_RATIO = 0.02;
 
     static std::string getToday() {
         time_t now = time(0);

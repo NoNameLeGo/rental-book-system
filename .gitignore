@@ -13,3 +13,6 @@
 Thumbs.db
 Desktop.ini
 .DS_Store
+
+# 浏览器截图
+pic/*.html

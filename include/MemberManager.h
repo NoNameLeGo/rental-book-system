@@ -22,7 +22,6 @@ public:
     void saveMembersToCSV(const std::string& filename);
     void readMembersFromCSV(const std::string& filename);
     
-    // 用户登录文件操作
     std::vector<std::string> readUserFromFile(const std::string& acc);
     bool addUserToCSV(const std::string& acc, const std::string& pwd, int role, const std::string& name, const std::string& phone);
     bool modifyUserInCSV(const std::string& acc, const std::string& pwd, const std::string& name, const std::string& phone);

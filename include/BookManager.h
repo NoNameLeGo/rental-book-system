@@ -15,19 +15,16 @@ public:
     BookManager() {}
     ~BookManager() {}
     
-    // 书籍管理
     void addBook(const Book& book);
     void modifyBook(const std::string& id, const Book& book);
     bool deleteBook(const std::string& id);
     Book* searchBook(const std::string& id);
     void showAllBooks();
     
-    // 分类管理
     void addCategory(const BookCategory& category);
     BookCategory* searchCategory(const std::string& id);
     void showAllCategories();
     
-    // 文件操作
     void saveBooksToCSV(const std::string& filename);
     void readBooksFromCSV(const std::string& filename);
     void saveCategoriesToCSV(const std::string& filename);

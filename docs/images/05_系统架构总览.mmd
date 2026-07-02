@@ -1,0 +1,37 @@
+flowchart TB
+    subgraph Presentation["表现层 main.cpp"]
+        A1[菜单显示]
+        A2[登录验证]
+        A3[输入处理]
+        A4[角色路由]
+    end
+    
+    subgraph Logic["业务逻辑层"]
+        B1[BookManager<br/>图书CRUD]
+        B2[MemberManager<br/>会员CRUD]
+        B3[RentalManager<br/>租借/归还]
+        B4[DateUtil<br/>日期计算]
+    end
+    
+    subgraph Data["数据层 CSV"]
+        C1[user.csv]
+        C2[book.csv]
+        C3[category.csv]
+        C4[member.csv]
+        C5[rental.csv]
+    end
+    
+    A1 --> B1
+    A1 --> B2
+    A2 --> B2
+    A3 --> B3
+    A4 --> B1
+    A4 --> B2
+    A4 --> B3
+    
+    B1 --> C2
+    B1 --> C3
+    B2 --> C1
+    B2 --> C4
+    B3 --> C5
+    B4 --> C5

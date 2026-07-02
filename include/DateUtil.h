@@ -3,6 +3,7 @@
 
 #include <string>
 #include <ctime>
+#include <cstdio>
 
 class DateUtil {
 public:

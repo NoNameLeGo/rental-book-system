@@ -255,7 +255,7 @@ int main() {
                 }
             } else if (role == 2) {  // 工作人员
                 switch (choice) {
-                    case 1: bookManager.showAllBooks(); break;
+                    case 1: handleBookManage(bookManager); break;
                     case 2: handleRentalManage(bookManager, memberManager, rentalManager); break;
                     case 3: rentalManager.showOverdueRecords(); break;
                     case 0: logout = true; cout << "已退出登录。" << endl; break;
@@ -264,7 +264,7 @@ int main() {
             } else {  // 会员
                 switch (choice) {
                     case 1: bookManager.showAllBooks(); break;
-                    case 2: handleRentalManage(bookManager, memberManager, rentalManager, user->getAcc()); break;
+                    case 2: rentBook(user->getAcc(), bookManager, rentalManager, memberManager); break;
                     case 3: returnBook(bookManager, rentalManager); break;
                     case 4: rentalManager.showMemberRecords(user->getAcc()); break;
                     case 0: logout = true; cout << "已退出登录。" << endl; break;
